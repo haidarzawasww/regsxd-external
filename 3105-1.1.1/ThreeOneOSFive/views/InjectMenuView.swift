@@ -333,26 +333,32 @@ struct InjectMenuView: View {
         guard openGameWorking != button.id else { return }
         openGameWorking = button.id
 
-        var opened = false
-        for scheme in button.urlSchemes {
-            if let url = URL(string: scheme),
-               UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url) { _ in
-                    DispatchQueue.main.async { self.openGameWorking = nil }
-                }
-                opened = true
-                break
+        // Coba buka scheme satu per satu, langsung open tanpa canOpenURL
+        // karena canOpenURL tidak reliable untuk game scheme di iOS modern
+        tryOpenSchemes(button.urlSchemes, button: button, index: 0)
+    }
+
+    private func tryOpenSchemes(_ schemes: [String], button: OpenGameButton, index: Int) {
+        guard index < schemes.count else {
+            // Semua scheme gagal — game tidak terinstall
+            DispatchQueue.main.async {
+                self.openGameWorking = nil
+                self.log("\(button.name) — not installed")
             }
+            return
         }
 
-        if !opened {
-            let storeURLStr = "itms-apps://itunes.apple.com/app/\(button.appStoreID)"
-            if let url = URL(string: storeURLStr) {
-                UIApplication.shared.open(url) { _ in
-                    DispatchQueue.main.async { self.openGameWorking = nil }
-                }
+        guard let url = URL(string: schemes[index]) else {
+            tryOpenSchemes(schemes, button: button, index: index + 1)
+            return
+        }
+
+        UIApplication.shared.open(url, options: [:]) { success in
+            if success {
+                DispatchQueue.main.async { self.openGameWorking = nil }
             } else {
-                openGameWorking = nil
+                // Scheme ini gagal, coba berikutnya
+                self.tryOpenSchemes(schemes, button: button, index: index + 1)
             }
         }
     }
