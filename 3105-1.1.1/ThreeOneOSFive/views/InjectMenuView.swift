@@ -255,14 +255,13 @@ struct InjectMenuView: View {
 
         guard let resourceURL else {
         results[button.id] = .failed("File not found in bundle")
-            log("\(button.name) — file not found")
+            log("\(button.name) — inject error: file not found")
             return
         }
 
         working = button.id
         results[button.id] = .working
         progress[button.id] = 0
-        log("\(button.name) — starting inject...")
 
         let id = button.id
         let startTime = Date()
@@ -281,7 +280,6 @@ struct InjectMenuView: View {
                 let containerURL = try resolveContainer(bundleID: button.bundleID)
                 let targetURL = containerURL.appendingPathComponent(button.targetPath)
                 let dir = targetURL.deletingLastPathComponent()
-                log("\(button.name) — target: \(targetURL.path)")
                 try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
                 let data = try Data(contentsOf: resourceURL)
                 let staging = dir.appendingPathComponent(".regsxd-inject-\(UUID().uuidString)")
@@ -296,7 +294,7 @@ struct InjectMenuView: View {
                     results[button.id] = .success
                     progress[button.id] = 1.0
                     working = nil
-                    log("\(button.name) — done")
+                    log("\(button.name) — apply success")
 
                     // Launch Free Fire jika launchAfterInject = true
                     if button.launchAfterInject {
@@ -325,7 +323,7 @@ struct InjectMenuView: View {
                 await MainActor.run {
                     results[button.id] = .failed(error.localizedDescription)
                     working = nil
-                    log("\(button.name) — failed")
+                    log("\(button.name) — inject error: \(error.localizedDescription)")
                 }
             }
         }
@@ -334,15 +332,13 @@ struct InjectMenuView: View {
     private func openGame(_ button: OpenGameButton) {
         guard openGameWorking != button.id else { return }
         openGameWorking = button.id
-        log("\(button.name) — opening...")
 
-        // Coba tiap URL scheme, kalau semua gagal fallback ke App Store
         var opened = false
         for scheme in button.urlSchemes {
             if let url = URL(string: scheme),
                UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url) { _ in
-                    DispatchQueue.main.async { openGameWorking = nil }
+                    DispatchQueue.main.async { self.openGameWorking = nil }
                 }
                 opened = true
                 break
@@ -350,18 +346,13 @@ struct InjectMenuView: View {
         }
 
         if !opened {
-            // Fallback: buka App Store page
             let storeURLStr = "itms-apps://itunes.apple.com/app/\(button.appStoreID)"
             if let url = URL(string: storeURLStr) {
                 UIApplication.shared.open(url) { _ in
-                    DispatchQueue.main.async {
-                        openGameWorking = nil
-                        log("\(button.name) — not installed, opened App Store")
-                    }
+                    DispatchQueue.main.async { self.openGameWorking = nil }
                 }
             } else {
                 openGameWorking = nil
-                log("\(button.name) — could not open")
             }
         }
     }
@@ -517,7 +508,7 @@ private struct OpenGameButtonCard: View {
     var body: some View {
         Button(action: onTap) {
             ZStack {
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .fill(
                         LinearGradient(
                             colors: isWorking
@@ -528,14 +519,13 @@ private struct OpenGameButtonCard: View {
                         )
                     )
 
-                HStack(spacing: 8) {
-                    // Icon
+                HStack(spacing: 6) {
                     Image(systemName: "gamecontroller.fill")
-                        .font(.system(size: 14))
-                        .foregroundStyle(isWorking ? Color.red : Color.white.opacity(0.7))
+                        .font(.system(size: 11))
+                        .foregroundStyle(isWorking ? Color.red : Color.white.opacity(0.6))
 
                     Text(button.name)
-                        .font(.system(size: 13, weight: .bold))
+                        .font(.system(size: 12, weight: .bold))
                         .foregroundStyle(.white)
                         .lineLimit(1)
 
@@ -544,21 +534,21 @@ private struct OpenGameButtonCard: View {
                     if isWorking {
                         ProgressView()
                             .progressViewStyle(.circular)
-                            .scaleEffect(0.7)
+                            .scaleEffect(0.6)
                             .tint(.red)
                     } else {
                         Image(systemName: "play.fill")
-                            .font(.system(size: 11))
+                            .font(.system(size: 9))
                             .foregroundStyle(.red.opacity(0.8))
                     }
                 }
-                .padding(.horizontal, 14)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
             }
         }
         .buttonStyle(.plain)
         .disabled(isWorking)
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, minHeight: 36, maxHeight: 36)
         .scaleEffect(pressed ? 0.96 : 1.0)
         .animation(.spring(response: 0.2, dampingFraction: 0.7), value: pressed)
         .simultaneousGesture(
@@ -567,15 +557,11 @@ private struct OpenGameButtonCard: View {
                 .onEnded { _ in pressed = false }
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .stroke(
                     isWorking ? Color.red.opacity(0.5) : Color(white: 0.15),
                     lineWidth: 1
                 )
-        )
-        .shadow(
-            color: isWorking ? Color.red.opacity(0.2) : Color.clear,
-            radius: 10, x: 0, y: 3
         )
     }
 }
