@@ -76,6 +76,8 @@
 "tab.home" = "Setting";
 "tab.files" = "Files";
 "tab.patches" = "Menu";
+"tab.extra" = "Extra";
+"tab.security" = "Security";
 "tab.cleaner" = "Cleaner";
 
 "cleaner.title" = "Cleaner";

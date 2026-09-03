@@ -1,8 +1,8 @@
 import SwiftUI
 
-// MARK: - Inject Menu View (AIMBOT)
+// MARK: - Security Menu View
 
-struct InjectMenuView: View {
+struct SecurityMenuView: View {
     @State private var results: [UUID: InjectResult] = [:]
     @State private var working: UUID? = nil
     @State private var progress: [UUID: Double] = [:]
@@ -10,28 +10,12 @@ struct InjectMenuView: View {
 
     let buttons: [InjectButton] = [
         InjectButton(
-            name: "AIMNECK",
-            category: "AIMBOT",
+            name: "BYPASS ANTICHEAT",
+            category: "SECURITY",
             bundleID: "com.dts.freefireth",
             targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
             resourceFileName: "cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
-            resourceSubfolder: "patches/aimneck"
-        ),
-        InjectButton(
-            name: "AIMDRAG",
-            category: "AIMBOT",
-            bundleID: "com.dts.freefireth",
-            targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/avatar/",
-            resourceFileName: "assetindexer.H5ak1JM1Eck~2FxRcJrEp~2FMzeuqmY~3D",
-            resourceSubfolder: "patches/aimdrag"
-        ),
-        InjectButton(
-            name: "AIMBODY",
-            category: "AIMBOT",
-            bundleID: "com.dts.freefireth",
-            targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
-            resourceFileName: "cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
-            resourceSubfolder: "patches/aimbody"
+            resourceSubfolder: "patches/Bypass anticheats"
         ),
     ]
 
@@ -52,7 +36,7 @@ struct InjectMenuView: View {
                         VStack(spacing: 24) {
                             VStack(alignment: .leading, spacing: 10) {
                                 HStack {
-                                    Text("AIMBOT")
+                                    Text("SECURITY")
                                         .font(.system(size: 11, weight: .bold))
                                         .foregroundStyle(.red.opacity(0.8))
                                         .kerning(1.5)
@@ -81,6 +65,7 @@ struct InjectMenuView: View {
                         .padding(.bottom, 12)
                     }
 
+                    // Console
                     ConsoleView(logs: consoleLogs)
                 }
             }
@@ -89,7 +74,7 @@ struct InjectMenuView: View {
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Menu")
+                    Text("Security")
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(.white)
                 }

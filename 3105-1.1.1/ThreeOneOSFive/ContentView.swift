@@ -164,6 +164,10 @@ struct ContentView: View {
             )
         case .patches:
             InjectMenuView()
+        case .extra:
+            ExtraMenuView()
+        case .security:
+            SecurityMenuView()
         case .cleaner:
             CleanerView()
         case .wallpapers:
@@ -231,6 +235,8 @@ private extension AppSection {
         case .home: return "tab.home"
         case .files: return "tab.files"
         case .patches: return "tab.patches"
+        case .extra: return "tab.extra"
+        case .security: return "tab.security"
         case .cleaner: return "tab.cleaner"
         case .wallpapers: return "tab.wallpapers"
         }
@@ -241,6 +247,8 @@ private extension AppSection {
         case .home: return "gearshape.fill"
         case .files: return "folder.fill"
         case .patches: return "square.grid.2x2.fill"
+        case .extra: return "bolt.fill"
+        case .security: return "lock.shield.fill"
         case .cleaner: return "sparkles"
         case .wallpapers: return "photo.on.rectangle.angled"
         }

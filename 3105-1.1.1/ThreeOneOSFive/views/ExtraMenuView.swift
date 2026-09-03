@@ -1,37 +1,38 @@
 import SwiftUI
 
-// MARK: - Inject Menu View (AIMBOT)
+// MARK: - Extra Menu View
 
-struct InjectMenuView: View {
+struct ExtraMenuView: View {
     @State private var results: [UUID: InjectResult] = [:]
     @State private var working: UUID? = nil
     @State private var progress: [UUID: Double] = [:]
     @State private var consoleLogs: [String] = []
+    @State private var openGameWorking: UUID? = nil
+
+    let openGameButtons: [OpenGameButton] = [
+        OpenGameButton(
+            name: "Free Fire",
+            bundleID: "com.dts.freefireth",
+            urlSchemes: ["freefire://", "garena://"],
+            appStoreID: "id1300146617"
+        ),
+        OpenGameButton(
+            name: "Free Fire MAX",
+            bundleID: "com.dts.freefiremax",
+            urlSchemes: ["freefiremax://", "garena://"],
+            appStoreID: "id1489675801"
+        ),
+    ]
 
     let buttons: [InjectButton] = [
         InjectButton(
-            name: "AIMNECK",
-            category: "AIMBOT",
+            name: "FPS 140",
+            category: "EXTRA",
             bundleID: "com.dts.freefireth",
-            targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
-            resourceFileName: "cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
-            resourceSubfolder: "patches/aimneck"
-        ),
-        InjectButton(
-            name: "AIMDRAG",
-            category: "AIMBOT",
-            bundleID: "com.dts.freefireth",
-            targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/avatar/",
-            resourceFileName: "assetindexer.H5ak1JM1Eck~2FxRcJrEp~2FMzeuqmY~3D",
-            resourceSubfolder: "patches/aimdrag"
-        ),
-        InjectButton(
-            name: "AIMBODY",
-            category: "AIMBOT",
-            bundleID: "com.dts.freefireth",
-            targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
-            resourceFileName: "cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
-            resourceSubfolder: "patches/aimbody"
+            targetPath: "Library/Preferences/com.dts.freefireth.plist",
+            resourceFileName: "com.dts.freefireth.plist",
+            resourceSubfolder: "patches/fps 140",
+            launchAfterInject: false
         ),
     ]
 
@@ -50,9 +51,10 @@ struct InjectMenuView: View {
                 VStack(spacing: 0) {
                     ScrollView {
                         VStack(spacing: 24) {
+                            // EXTRA patch buttons
                             VStack(alignment: .leading, spacing: 10) {
                                 HStack {
-                                    Text("AIMBOT")
+                                    Text("EXTRA")
                                         .font(.system(size: 11, weight: .bold))
                                         .foregroundStyle(.red.opacity(0.8))
                                         .kerning(1.5)
@@ -76,11 +78,38 @@ struct InjectMenuView: View {
                                 }
                                 .padding(.horizontal, 16)
                             }
+
+                            // OPEN GAME buttons
+                            VStack(alignment: .leading, spacing: 10) {
+                                HStack {
+                                    Text("OPEN GAME")
+                                        .font(.system(size: 11, weight: .bold))
+                                        .foregroundStyle(.red.opacity(0.8))
+                                        .kerning(1.5)
+                                    Rectangle()
+                                        .fill(Color.red.opacity(0.2))
+                                        .frame(height: 1)
+                                }
+                                .padding(.horizontal, 16)
+
+                                HStack(spacing: 10) {
+                                    ForEach(openGameButtons) { btn in
+                                        OpenGameButtonCard(
+                                            button: btn,
+                                            isWorking: openGameWorking == btn.id
+                                        ) {
+                                            openGame(btn)
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal, 16)
+                            }
                         }
                         .padding(.top, 20)
                         .padding(.bottom, 12)
                     }
 
+                    // Console
                     ConsoleView(logs: consoleLogs)
                 }
             }
@@ -89,7 +118,7 @@ struct InjectMenuView: View {
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Menu")
+                    Text("Extra")
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(.white)
                 }
@@ -161,6 +190,33 @@ struct InjectMenuView: View {
                     working = nil
                     log("\(button.name) — inject error: \(error.localizedDescription)")
                 }
+            }
+        }
+    }
+
+    private func openGame(_ button: OpenGameButton) {
+        guard openGameWorking != button.id else { return }
+        openGameWorking = button.id
+        tryOpenSchemes(button.urlSchemes, button: button, index: 0)
+    }
+
+    private func tryOpenSchemes(_ schemes: [String], button: OpenGameButton, index: Int) {
+        guard index < schemes.count else {
+            DispatchQueue.main.async {
+                self.openGameWorking = nil
+                self.log("\(button.name) — not installed")
+            }
+            return
+        }
+        guard let url = URL(string: schemes[index]) else {
+            tryOpenSchemes(schemes, button: button, index: index + 1)
+            return
+        }
+        UIApplication.shared.open(url, options: [:]) { success in
+            if success {
+                DispatchQueue.main.async { self.openGameWorking = nil }
+            } else {
+                self.tryOpenSchemes(schemes, button: button, index: index + 1)
             }
         }
     }
