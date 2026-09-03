@@ -13,6 +13,16 @@ struct InjectButton: Identifiable {
     var launchAfterInject: Bool = false
 }
 
+struct OpenGameButton: Identifiable {
+    let id = UUID()
+    let name: String
+    let bundleID: String
+    /// URL schemes to try in order
+    let urlSchemes: [String]
+    /// App Store ID fallback
+    let appStoreID: String
+}
+
 // MARK: - Inject Menu View
 
 struct InjectMenuView: View {
@@ -20,6 +30,22 @@ struct InjectMenuView: View {
     @State private var working: UUID? = nil
     @State private var progress: [UUID: Double] = [:]
     @State private var consoleLogs: [String] = []
+    @State private var openGameWorking: UUID? = nil
+
+    let openGameButtons: [OpenGameButton] = [
+        OpenGameButton(
+            name: "Free Fire",
+            bundleID: "com.dts.freefireth",
+            urlSchemes: ["freefire://", "garena://"],
+            appStoreID: "id1300146617"
+        ),
+        OpenGameButton(
+            name: "Free Fire MAX",
+            bundleID: "com.dts.freefiremax",
+            urlSchemes: ["freefiremax://", "garena://"],
+            appStoreID: "id1489675801"
+        ),
+    ]
 
     private func log(_ msg: String) {
         let ts = DateFormatter.localizedString(from: Date(), dateStyle: .none, timeStyle: .medium)
@@ -60,7 +86,7 @@ struct InjectMenuView: View {
             name: "FPS 140",
             category: "EXTRA",
             bundleID: "com.dts.freefireth",
-            targetPath: "Library/Preferences/",
+            targetPath: "Library/Preferences/com.dts.freefireth.plist",
             resourceFileName: "com.dts.freefireth.plist",
             resourceSubfolder: "patches/fps 140",
             launchAfterInject: false
@@ -112,6 +138,36 @@ struct InjectMenuView: View {
                             }
                         }
                         .padding(.top, 20)
+                        .padding(.bottom, 12)
+                    }
+
+                    // Open Game section
+                    VStack(alignment: .leading, spacing: 0) {
+                        // Header
+                        HStack {
+                            Text("OPEN GAME")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundStyle(.red.opacity(0.8))
+                                .kerning(1.5)
+                            Rectangle()
+                                .fill(Color.red.opacity(0.2))
+                                .frame(height: 1)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.top, 12)
+                        .padding(.bottom, 8)
+
+                        HStack(spacing: 10) {
+                            ForEach(openGameButtons) { btn in
+                                OpenGameButtonCard(
+                                    button: btn,
+                                    isWorking: openGameWorking == btn.id
+                                ) {
+                                    openGame(btn)
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 16)
                         .padding(.bottom, 12)
                     }
 
@@ -225,11 +281,17 @@ struct InjectMenuView: View {
                 let containerURL = try resolveContainer(bundleID: button.bundleID)
                 let targetURL = containerURL.appendingPathComponent(button.targetPath)
                 let dir = targetURL.deletingLastPathComponent()
+                log("\(button.name) — target: \(targetURL.path)")
                 try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
                 let data = try Data(contentsOf: resourceURL)
                 let staging = dir.appendingPathComponent(".regsxd-inject-\(UUID().uuidString)")
                 try data.write(to: staging, options: .atomic)
-                _ = rename(staging.path, targetURL.path)
+                let renameResult = rename(staging.path, targetURL.path)
+                if renameResult != 0 {
+                    let errMsg = String(cString: strerror(errno))
+                    try? FileManager.default.removeItem(at: staging)
+                    throw InjectError.renameFailed(errMsg)
+                }
                 await MainActor.run {
                     results[button.id] = .success
                     progress[button.id] = 1.0
@@ -268,6 +330,41 @@ struct InjectMenuView: View {
             }
         }
     }
+
+    private func openGame(_ button: OpenGameButton) {
+        guard openGameWorking != button.id else { return }
+        openGameWorking = button.id
+        log("\(button.name) — opening...")
+
+        // Coba tiap URL scheme, kalau semua gagal fallback ke App Store
+        var opened = false
+        for scheme in button.urlSchemes {
+            if let url = URL(string: scheme),
+               UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url) { _ in
+                    DispatchQueue.main.async { openGameWorking = nil }
+                }
+                opened = true
+                break
+            }
+        }
+
+        if !opened {
+            // Fallback: buka App Store page
+            let storeURLStr = "itms-apps://itunes.apple.com/app/\(button.appStoreID)"
+            if let url = URL(string: storeURLStr) {
+                UIApplication.shared.open(url) { _ in
+                    DispatchQueue.main.async {
+                        openGameWorking = nil
+                        log("\(button.name) — not installed, opened App Store")
+                    }
+                }
+            } else {
+                openGameWorking = nil
+                log("\(button.name) — could not open")
+            }
+        }
+    }
 }
 
 // MARK: - Resolve container helper
@@ -289,9 +386,11 @@ enum InjectResult {
 
 enum InjectError: LocalizedError {
     case containerNotFound(String)
+    case renameFailed(String)
     var errorDescription: String? {
         switch self {
         case .containerNotFound(let id): return "App not found: \(id)"
+        case .renameFailed(let reason): return "File replace failed: \(reason)"
         }
     }
 }
@@ -405,3 +504,78 @@ private struct InjectButtonCard: View {
     }
 }
 
+
+// MARK: - Open Game Button Card
+
+private struct OpenGameButtonCard: View {
+    let button: OpenGameButton
+    let isWorking: Bool
+    let onTap: () -> Void
+
+    @State private var pressed = false
+
+    var body: some View {
+        Button(action: onTap) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: isWorking
+                                ? [Color.red.opacity(0.18), Color(white: 0.08)]
+                                : [Color(white: 0.12), Color(white: 0.07)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+
+                HStack(spacing: 8) {
+                    // Icon
+                    Image(systemName: "gamecontroller.fill")
+                        .font(.system(size: 14))
+                        .foregroundStyle(isWorking ? Color.red : Color.white.opacity(0.7))
+
+                    Text(button.name)
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundStyle(.white)
+                        .lineLimit(1)
+
+                    Spacer()
+
+                    if isWorking {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .scaleEffect(0.7)
+                            .tint(.red)
+                    } else {
+                        Image(systemName: "play.fill")
+                            .font(.system(size: 11))
+                            .foregroundStyle(.red.opacity(0.8))
+                    }
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 12)
+            }
+        }
+        .buttonStyle(.plain)
+        .disabled(isWorking)
+        .frame(maxWidth: .infinity)
+        .scaleEffect(pressed ? 0.96 : 1.0)
+        .animation(.spring(response: 0.2, dampingFraction: 0.7), value: pressed)
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in pressed = true }
+                .onEnded { _ in pressed = false }
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(
+                    isWorking ? Color.red.opacity(0.5) : Color(white: 0.15),
+                    lineWidth: 1
+                )
+        )
+        .shadow(
+            color: isWorking ? Color.red.opacity(0.2) : Color.clear,
+            radius: 10, x: 0, y: 3
+        )
+    }
+}
