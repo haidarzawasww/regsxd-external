@@ -66,6 +66,9 @@
 		3105X101 /* LicenseGateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105X002; };
 		3105X104 /* patches folder in Resources */ = {isa = PBXBuildFile; fileRef = 3105X004; };
 		3105X102 /* InjectMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105X003; };
+		3105Y100 /* InjectShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105Y001; };
+		3105Y101 /* ExtraMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105Y002; };
+		3105Y102 /* SecurityMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105Y003; };
 		3105I200 /* FilesTabControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105I100; };
 		3105I201 /* FilesTabSwitcherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105I101; };
 		3105A233 /* ContainerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105A104; };
@@ -152,6 +155,9 @@
 		3105X001 /* LicenseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseService.swift; sourceTree = "<group>"; };
 		3105X002 /* LicenseGateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseGateView.swift; sourceTree = "<group>"; };
 		3105X003 /* InjectMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectMenuView.swift; sourceTree = "<group>"; };
+		3105Y001 /* InjectShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectShared.swift; sourceTree = "<group>"; };
+		3105Y002 /* ExtraMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraMenuView.swift; sourceTree = "<group>"; };
+		3105Y003 /* SecurityMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityMenuView.swift; sourceTree = "<group>"; };
 		3105X004 /* patches */ = {isa = PBXFileReference; lastKnownFileType = folder; path = patches; sourceTree = "<group>"; };
 		3105I100 /* FilesTabControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesTabControls.swift; sourceTree = "<group>"; };
 		3105I101 /* FilesTabSwitcherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesTabSwitcherView.swift; sourceTree = "<group>"; };
@@ -224,6 +230,9 @@
 				3105A098 /* DesignSystem.swift */,
 				3105X002 /* LicenseGateView.swift */,
 				3105X003 /* InjectMenuView.swift */,
+				3105Y001 /* InjectShared.swift */,
+				3105Y002 /* ExtraMenuView.swift */,
+				3105Y003 /* SecurityMenuView.swift */,
 				3105A023 /* SettingsView.swift */,
 				3105A024 /* LogView.swift */,
 				3105A105 /* AppDataBrowserView.swift */,
@@ -425,6 +434,9 @@
 				3105X100,
 				3105X101,
 				3105X102,
+				3105Y100,
+				3105Y101,
+				3105Y102,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
