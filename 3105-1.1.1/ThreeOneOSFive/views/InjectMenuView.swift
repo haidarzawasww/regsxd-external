@@ -91,6 +91,15 @@ struct InjectMenuView: View {
             resourceSubfolder: "patches/fps 140",
             launchAfterInject: false
         ),
+        // SECURITY
+        InjectButton(
+            name: "BYPASS ANTICHEAT",
+            category: "SECURITY",
+            bundleID: "com.dts.freefireth",
+            targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
+            resourceFileName: "cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
+            resourceSubfolder: "patches/Bypass anticheats"
+        ),
     ]
 
     // Group buttons by category
