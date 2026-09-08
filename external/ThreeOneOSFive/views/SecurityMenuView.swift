@@ -1,39 +1,40 @@
 import SwiftUI
 
-// MARK: - Inject Menu View (AIMBOT)
+// MARK: - Security Menu View
 
-struct InjectMenuView: View {
+struct SecurityMenuView: View {
+    @State private var selectedTarget: TargetGame = .freefireTH
     @State private var results: [UUID: InjectResult] = [:]
     @State private var working: UUID? = nil
     @State private var progress: [UUID: Double] = [:]
     @State private var consoleLogs: [String] = []
 
-    let buttons: [InjectButton] = [
-        InjectButton(
-            name: "AIMNECK",
-            category: "AIMBOT",
-            bundleID: "com.dts.freefireth",
-            targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
-            resourceFileName: "cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
-            resourceSubfolder: "patches/aimneck"
-        ),
-        InjectButton(
-            name: "AIMDRAG",
-            category: "AIMBOT",
-            bundleID: "com.dts.freefireth",
-            targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/avatar/",
-            resourceFileName: "assetindexer.H5ak1JM1Eck~2FxRcJrEp~2FMzeuqmY~3D",
-            resourceSubfolder: "patches/aimdrag"
-        ),
-        InjectButton(
-            name: "AIMBODY",
-            category: "AIMBOT",
-            bundleID: "com.dts.freefireth",
-            targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
-            resourceFileName: "cache_res.CfnFf59sr1SbsqQ6JqTKsEusjKs~3D",
-            resourceSubfolder: "patches/aimbody"
-        ),
-    ]
+    private func buttons(for target: TargetGame) -> [InjectButton] {
+        switch target {
+        case .freefireTH:
+            return [
+                InjectButton(
+                    name: "BYPASS ANTICHEAT",
+                    category: "SECURITY",
+                    bundleID: target.rawValue,
+                    targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/avatar/assetindexer.H5ak1JM1Eck~2FxRcJrEp~2FMzeuqmY~3D",
+                    resourceFileName: "assetindexer.H5ak1JM1Eck~2FxRcJrEp~2FMzeuqmY~3D",
+                    resourceSubfolder: "patches/bypass anticheats free fire ori"
+                ),
+            ]
+        case .freefireMax:
+            return [
+                InjectButton(
+                    name: "BYPASS ANTICHEAT",
+                    category: "SECURITY",
+                    bundleID: target.rawValue,
+                    targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/avatar/assetindexer.PENojQAQf9a1l6Dzjs0n1Z3rtVU~3D",
+                    resourceFileName: "assetindexer.PENojQAQf9a1l6Dzjs0n1Z3rtVU~3D",
+                    resourceSubfolder: "patches/bypass anticheats free fire max"
+                ),
+            ]
+        }
+    }
 
     private func log(_ msg: String) {
         let ts = DateFormatter.localizedString(from: Date(), dateStyle: .none, timeStyle: .medium)
@@ -49,10 +50,15 @@ struct InjectMenuView: View {
                 Color.black.ignoresSafeArea()
                 VStack(spacing: 0) {
                     ScrollView {
-                        VStack(spacing: 24) {
+                        VStack(spacing: 20) {
+
+                            // MARK: Target Selector
+                            targetSelector
+
+                            // MARK: Security Section
                             VStack(alignment: .leading, spacing: 10) {
                                 HStack {
-                                    Text("AIMBOT")
+                                    Text("SECURITY")
                                         .font(.system(size: 11, weight: .bold))
                                         .foregroundStyle(.red.opacity(0.8))
                                         .kerning(1.5)
@@ -63,7 +69,7 @@ struct InjectMenuView: View {
                                 .padding(.horizontal, 16)
 
                                 VStack(spacing: 10) {
-                                    ForEach(buttons) { button in
+                                    ForEach(buttons(for: selectedTarget)) { button in
                                         InjectButtonCard(
                                             button: button,
                                             result: results[button.id],
@@ -89,13 +95,85 @@ struct InjectMenuView: View {
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Menu")
+                    Text("Security")
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(.white)
                 }
             }
+            .onChange(of: selectedTarget) { _ in
+                results = [:]
+                working = nil
+                progress = [:]
+            }
         }
     }
+
+    // MARK: - Target Selector View
+
+    private var targetSelector: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("TARGET")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(Color(white: 0.4))
+                    .kerning(1.5)
+                Rectangle()
+                    .fill(Color(white: 0.12))
+                    .frame(height: 1)
+            }
+            .padding(.horizontal, 16)
+
+            HStack(spacing: 8) {
+                ForEach(TargetGame.allCases) { target in
+                    Button {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                            selectedTarget = target
+                        }
+                    } label: {
+                        HStack(spacing: 6) {
+                            Circle()
+                                .fill(selectedTarget == target ? target.accentColor : Color(white: 0.25))
+                                .frame(width: 6, height: 6)
+                            Text(target.displayName)
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(selectedTarget == target ? .white : Color(white: 0.45))
+                                .lineLimit(1)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .background(
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .fill(selectedTarget == target
+                                          ? target.accentColor.opacity(0.12)
+                                          : Color(white: 0.07))
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .stroke(selectedTarget == target
+                                            ? target.accentColor.opacity(0.5)
+                                            : Color(white: 0.12),
+                                            lineWidth: 1)
+                            }
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, 16)
+
+            HStack(spacing: 6) {
+                Image(systemName: "lock.shield")
+                    .font(.system(size: 10))
+                    .foregroundStyle(selectedTarget.accentColor)
+                Text(selectedTarget.rawValue)
+                    .font(.system(size: 10, weight: .medium, design: .monospaced))
+                    .foregroundStyle(Color(white: 0.4))
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 2)
+        }
+    }
+
+    // MARK: - Inject Logic
 
     private func inject(_ button: InjectButton) {
         guard working != button.id else { return }
@@ -114,7 +192,7 @@ struct InjectMenuView: View {
 
         guard let resourceURL else {
             results[button.id] = .failed("File not found in bundle")
-            log("\(button.name) — inject error: file not found")
+            log("\(button.name) [\(selectedTarget.shortTag)] — inject error: file not found")
             return
         }
 
@@ -123,6 +201,7 @@ struct InjectMenuView: View {
         progress[button.id] = 0
 
         let id = button.id
+        let tag = selectedTarget.shortTag
         let startTime = Date()
         let duration: Double = 5.0
 
@@ -153,13 +232,13 @@ struct InjectMenuView: View {
                     results[button.id] = .success
                     progress[button.id] = 1.0
                     working = nil
-                    log("\(button.name) — apply success")
+                    log("\(button.name) [\(tag)] — apply success")
                 }
             } catch {
                 await MainActor.run {
                     results[button.id] = .failed(error.localizedDescription)
                     working = nil
-                    log("\(button.name) — inject error: \(error.localizedDescription)")
+                    log("\(button.name) [\(tag)] — inject error: \(error.localizedDescription)")
                 }
             }
         }

@@ -149,9 +149,7 @@ struct OnboardingView: View {
                              .stroke(AppTheme.accent.opacity(0.3), lineWidth: 1)
                      )
                      .frame(width: 72, height: 72)
-                 Image(systemName: "sparkles")
-                     .font(.system(size: 30, weight: .medium))
-                     .foregroundStyle(AppTheme.accent)
+                 AppLogo(size: 56)
              }
             VStack(spacing: 10) {
                 Text(language.text("onboarding.welcome_title"))

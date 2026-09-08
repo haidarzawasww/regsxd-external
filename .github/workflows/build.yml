@@ -19,8 +19,8 @@ jobs:
     - name: Build .app (unsigned)
       run: |
         xcodebuild \
-          -project 3105-1.1.1/ThreeOneOSFive.xcodeproj \
-          -scheme 3105 \
+          -project external/ThreeOneOSFive.xcodeproj \
+          -scheme ThreeOneOSFive \
           -configuration Release \
           -sdk iphoneos \
           -derivedDataPath build \
@@ -28,10 +28,15 @@ jobs:
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO
 
+    - name: Find built .app
+      run: find build/Build/Products -name "*.app" -type d
+
     - name: Create IPA
       run: |
+        APP_PATH=$(find build/Build/Products/Release-iphoneos -name "*.app" -maxdepth 1 -type d | head -1)
+        echo "Found app: $APP_PATH"
         mkdir -p Payload
-        cp -R "build/Build/Products/Release-iphoneos/REGSXD EXTERNAL.app" Payload/
+        cp -R "$APP_PATH" Payload/
         zip -r REGSXD.ipa Payload
 
     - name: Upload IPA
@@ -39,3 +44,4 @@ jobs:
       with:
         name: REGSXD-unsigned-ipa
         path: REGSXD.ipa
+        retention-days: 7

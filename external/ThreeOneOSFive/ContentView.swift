@@ -249,7 +249,7 @@ private extension AppSection {
         case .patches: return "square.grid.2x2.fill"
         case .extra: return "bolt.fill"
         case .security: return "lock.shield.fill"
-        case .cleaner: return "sparkles"
+        case .cleaner: return "trash.circle.fill"
         case .wallpapers: return "photo.on.rectangle.angled"
         }
     }
@@ -293,6 +293,28 @@ private struct DashboardView: View {
                             .foregroundStyle(.red.opacity(0.7))
                     }
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    HStack(spacing: 14) {
+                        Button { showLogs = true } label: {
+                            Image(systemName: "terminal")
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundStyle(Color(white: 0.55))
+                        }
+                        .accessibilityLabel("Logs")
+                        Button { showSettings = true } label: {
+                            Image(systemName: "gearshape")
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundStyle(Color(white: 0.55))
+                        }
+                        .accessibilityLabel("Settings")
+                    }
+                }
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
+            }
+            .sheet(isPresented: $showLogs) {
+                LogView()
             }
             .confirmationDialog("Logout?", isPresented: $showLogoutConfirm, titleVisibility: .visible) {
                 Button("Logout", role: .destructive) {
@@ -372,9 +394,9 @@ private struct DashboardView: View {
                 .listRowBackground(Color(white: 0.07))
 
                 HStack {
-                    Image(systemName: "calendar.badge.clock")
+                    Image(systemName: "clock.fill")
                         .foregroundStyle(state.daysRemaining <= 1 ? .red : .green)
-                    Text("Expired")
+                    Text("Expires")
                         .foregroundStyle(.secondary)
                     Spacer()
                     VStack(alignment: .trailing, spacing: 2) {

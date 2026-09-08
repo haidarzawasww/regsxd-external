@@ -107,7 +107,7 @@ struct AppLogo: View {
                     .resizable()
                     .scaledToFill()
             } else {
-                Image(systemName: "slider.horizontal.3")
+                Image(systemName: "rectangle.3.group.fill")
                     .font(.title2.weight(.semibold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)

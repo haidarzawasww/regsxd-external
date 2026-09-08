@@ -3,6 +3,7 @@ import SwiftUI
 // MARK: - Extra Menu View
 
 struct ExtraMenuView: View {
+    @State private var selectedTarget: TargetGame = .freefireTH
     @State private var results: [UUID: InjectResult] = [:]
     @State private var working: UUID? = nil
     @State private var progress: [UUID: Double] = [:]
@@ -24,17 +25,34 @@ struct ExtraMenuView: View {
         ),
     ]
 
-    let buttons: [InjectButton] = [
-        InjectButton(
-            name: "FPS 140",
-            category: "EXTRA",
-            bundleID: "com.dts.freefireth",
-            targetPath: "Library/Preferences/com.dts.freefireth.plist",
-            resourceFileName: "com.dts.freefireth.plist",
-            resourceSubfolder: "patches/fps 140",
-            launchAfterInject: false
-        ),
-    ]
+    private func extraButtons(for target: TargetGame) -> [InjectButton] {
+        switch target {
+        case .freefireTH:
+            return [
+                InjectButton(
+                    name: "FPS 140",
+                    category: "EXTRA",
+                    bundleID: target.rawValue,
+                    targetPath: "Library/Preferences/com.dts.freefireth.plist",
+                    resourceFileName: "com.dts.freefireth.plist",
+                    resourceSubfolder: "patches/fps 140",
+                    launchAfterInject: false
+                ),
+            ]
+        case .freefireMax:
+            return [
+                InjectButton(
+                    name: "FPS 140",
+                    category: "EXTRA",
+                    bundleID: target.rawValue,
+                    targetPath: "Library/Preferences/com.dts.freefiremax.plist",
+                    resourceFileName: "com.dts.freefiremax.plist",
+                    resourceSubfolder: "patches/fps 140",
+                    launchAfterInject: false
+                ),
+            ]
+        }
+    }
 
     private func log(_ msg: String) {
         let ts = DateFormatter.localizedString(from: Date(), dateStyle: .none, timeStyle: .medium)
@@ -50,8 +68,12 @@ struct ExtraMenuView: View {
                 Color.black.ignoresSafeArea()
                 VStack(spacing: 0) {
                     ScrollView {
-                        VStack(spacing: 24) {
-                            // EXTRA patch buttons
+                        VStack(spacing: 20) {
+
+                            // MARK: Target Selector
+                            targetSelector
+
+                            // MARK: EXTRA patch buttons
                             VStack(alignment: .leading, spacing: 10) {
                                 HStack {
                                     Text("EXTRA")
@@ -65,7 +87,7 @@ struct ExtraMenuView: View {
                                 .padding(.horizontal, 16)
 
                                 VStack(spacing: 10) {
-                                    ForEach(buttons) { button in
+                                    ForEach(extraButtons(for: selectedTarget)) { button in
                                         InjectButtonCard(
                                             button: button,
                                             result: results[button.id],
@@ -79,7 +101,7 @@ struct ExtraMenuView: View {
                                 .padding(.horizontal, 16)
                             }
 
-                            // OPEN GAME buttons
+                            // MARK: OPEN GAME buttons
                             VStack(alignment: .leading, spacing: 10) {
                                 HStack {
                                     Text("OPEN GAME")
@@ -109,7 +131,6 @@ struct ExtraMenuView: View {
                         .padding(.bottom, 12)
                     }
 
-                    // Console
                     ConsoleView(logs: consoleLogs)
                 }
             }
@@ -123,8 +144,80 @@ struct ExtraMenuView: View {
                         .foregroundStyle(.white)
                 }
             }
+            .onChange(of: selectedTarget) { _ in
+                results = [:]
+                working = nil
+                progress = [:]
+            }
         }
     }
+
+    // MARK: - Target Selector View
+
+    private var targetSelector: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("TARGET")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(Color(white: 0.4))
+                    .kerning(1.5)
+                Rectangle()
+                    .fill(Color(white: 0.12))
+                    .frame(height: 1)
+            }
+            .padding(.horizontal, 16)
+
+            HStack(spacing: 8) {
+                ForEach(TargetGame.allCases) { target in
+                    Button {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                            selectedTarget = target
+                        }
+                    } label: {
+                        HStack(spacing: 6) {
+                            Circle()
+                                .fill(selectedTarget == target ? target.accentColor : Color(white: 0.25))
+                                .frame(width: 6, height: 6)
+                            Text(target.displayName)
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(selectedTarget == target ? .white : Color(white: 0.45))
+                                .lineLimit(1)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .background(
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .fill(selectedTarget == target
+                                          ? target.accentColor.opacity(0.12)
+                                          : Color(white: 0.07))
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .stroke(selectedTarget == target
+                                            ? target.accentColor.opacity(0.5)
+                                            : Color(white: 0.12),
+                                            lineWidth: 1)
+                            }
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, 16)
+
+            HStack(spacing: 6) {
+                Image(systemName: "bolt")
+                    .font(.system(size: 10))
+                    .foregroundStyle(selectedTarget.accentColor)
+                Text(selectedTarget.rawValue)
+                    .font(.system(size: 10, weight: .medium, design: .monospaced))
+                    .foregroundStyle(Color(white: 0.4))
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 2)
+        }
+    }
+
+    // MARK: - Inject Logic
 
     private func inject(_ button: InjectButton) {
         guard working != button.id else { return }
@@ -143,7 +236,7 @@ struct ExtraMenuView: View {
 
         guard let resourceURL else {
             results[button.id] = .failed("File not found in bundle")
-            log("\(button.name) — inject error: file not found")
+            log("\(button.name) [\(selectedTarget.shortTag)] — inject error: file not found")
             return
         }
 
@@ -152,6 +245,7 @@ struct ExtraMenuView: View {
         progress[button.id] = 0
 
         let id = button.id
+        let tag = selectedTarget.shortTag
         let startTime = Date()
         let duration: Double = 5.0
 
@@ -182,17 +276,19 @@ struct ExtraMenuView: View {
                     results[button.id] = .success
                     progress[button.id] = 1.0
                     working = nil
-                    log("\(button.name) — apply success")
+                    log("\(button.name) [\(tag)] — apply success")
                 }
             } catch {
                 await MainActor.run {
                     results[button.id] = .failed(error.localizedDescription)
                     working = nil
-                    log("\(button.name) — inject error: \(error.localizedDescription)")
+                    log("\(button.name) [\(tag)] — inject error: \(error.localizedDescription)")
                 }
             }
         }
     }
+
+    // MARK: - Open Game Logic
 
     private func openGame(_ button: OpenGameButton) {
         guard openGameWorking != button.id else { return }

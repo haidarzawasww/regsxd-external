@@ -22,7 +22,7 @@ struct LogView: View {
             Group {
                 if appLog.entries.isEmpty {
                     VStack(spacing: 14) {
-                        Image(systemName: "apple.terminal")
+                        Image(systemName: "terminal")
                             .font(.system(size: AppTheme.emptyIconSize, weight: .medium))
                             .foregroundStyle(.secondary)
                         Text(language.text("logs.empty_title"))
