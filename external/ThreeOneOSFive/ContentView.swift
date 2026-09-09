@@ -247,7 +247,7 @@ private extension AppSection {
         case .home: return "gearshape.fill"
         case .files: return "folder.fill"
         case .patches: return "square.grid.2x2.fill"
-        case .extra: return "bolt.fill"
+        case .extra: return "ellipsis.circle.fill"
         case .security: return "lock.shield.fill"
         case .cleaner: return "trash.circle.fill"
         case .wallpapers: return "photo.on.rectangle.angled"
@@ -293,22 +293,7 @@ private struct DashboardView: View {
                             .foregroundStyle(.red.opacity(0.7))
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    HStack(spacing: 14) {
-                        Button { showLogs = true } label: {
-                            Image(systemName: "terminal")
-                                .font(.system(size: 15, weight: .medium))
-                                .foregroundStyle(Color(white: 0.55))
-                        }
-                        .accessibilityLabel("Logs")
-                        Button { showSettings = true } label: {
-                            Image(systemName: "gearshape")
-                                .font(.system(size: 15, weight: .medium))
-                                .foregroundStyle(Color(white: 0.55))
-                        }
-                        .accessibilityLabel("Settings")
-                    }
-                }
+
             }
             .sheet(isPresented: $showSettings) {
                 SettingsView()

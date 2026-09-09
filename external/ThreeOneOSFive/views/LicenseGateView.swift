@@ -94,12 +94,6 @@ struct KeyEntryView: View {
                         .foregroundStyle(.white)
                         .kerning(1.2)
 
-                    Text("iOS EDITION")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(.red)
-                        .kerning(3)
-                        .padding(.top, 2)
-
                     // Divider
                     HStack(spacing: 8) {
                         Rectangle()
