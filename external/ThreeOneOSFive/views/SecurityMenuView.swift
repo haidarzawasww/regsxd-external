@@ -48,43 +48,29 @@ struct SecurityMenuView: View {
         NavigationStack {
             ZStack {
                 Color.black.ignoresSafeArea()
+
+                // subtle top glow
+                VStack {
+                    RadialGradient(
+                        colors: [Color.red.opacity(0.10), Color.clear],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: 200
+                    )
+                    .frame(height: 200)
+                    .offset(y: -40)
+                    Spacer()
+                }
+                .ignoresSafeArea()
+
                 VStack(spacing: 0) {
                     ScrollView {
-                        VStack(spacing: 20) {
-
-                            // MARK: Target Selector
+                        VStack(spacing: 24) {
                             targetSelector
-
-                            // MARK: Security Section
-                            VStack(alignment: .leading, spacing: 10) {
-                                HStack {
-                                    Text("SECURITY")
-                                        .font(.system(size: 11, weight: .bold))
-                                        .foregroundStyle(.red.opacity(0.8))
-                                        .kerning(1.5)
-                                    Rectangle()
-                                        .fill(Color.red.opacity(0.2))
-                                        .frame(height: 1)
-                                }
-                                .padding(.horizontal, 16)
-
-                                VStack(spacing: 10) {
-                                    ForEach(buttons(for: selectedTarget)) { button in
-                                        InjectButtonCard(
-                                            button: button,
-                                            result: results[button.id],
-                                            isWorking: working == button.id,
-                                            progress: progress[button.id] ?? 0
-                                        ) {
-                                            inject(button)
-                                        }
-                                    }
-                                }
-                                .padding(.horizontal, 16)
-                            }
+                            securitySection
                         }
                         .padding(.top, 20)
-                        .padding(.bottom, 12)
+                        .padding(.bottom, 16)
                     }
 
                     ConsoleView(logs: consoleLogs)
@@ -95,9 +81,15 @@ struct SecurityMenuView: View {
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Security")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(.white)
+                    HStack(spacing: 6) {
+                        Image(systemName: "lock.shield.fill")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundStyle(.red)
+                        Text("SECURITY")
+                            .font(.system(size: 15, weight: .black))
+                            .foregroundStyle(.white)
+                            .kerning(1.5)
+                    }
                 }
             }
             .onChange(of: selectedTarget) { _ in
@@ -108,18 +100,20 @@ struct SecurityMenuView: View {
         }
     }
 
-    // MARK: - Target Selector View
+    // MARK: - Target Selector
 
     private var targetSelector: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(spacing: 10) {
             HStack {
-                Text("TARGET")
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(Color(white: 0.4))
-                    .kerning(1.5)
                 Rectangle()
-                    .fill(Color(white: 0.12))
-                    .frame(height: 1)
+                    .fill(Color.red.opacity(0.5))
+                    .frame(width: 3, height: 12)
+                    .clipShape(Capsule())
+                Text("TARGET")
+                    .font(.system(size: 10, weight: .black))
+                    .foregroundStyle(Color(white: 0.45))
+                    .kerning(2)
+                Spacer()
             }
             .padding(.horizontal, 16)
 
@@ -130,27 +124,28 @@ struct SecurityMenuView: View {
                             selectedTarget = target
                         }
                     } label: {
-                        HStack(spacing: 6) {
-                            Circle()
-                                .fill(selectedTarget == target ? target.accentColor : Color(white: 0.25))
-                                .frame(width: 6, height: 6)
+                        VStack(spacing: 4) {
+                            Text(target.shortTag)
+                                .font(.system(size: 11, weight: .black))
+                                .foregroundStyle(selectedTarget == target ? target.accentColor : Color(white: 0.3))
+                                .kerning(1)
                             Text(target.displayName)
                                 .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(selectedTarget == target ? .white : Color(white: 0.45))
+                                .foregroundStyle(selectedTarget == target ? .white : Color(white: 0.4))
                                 .lineLimit(1)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
+                        .padding(.vertical, 12)
                         .background(
                             ZStack {
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                RoundedRectangle(cornerRadius: 12, style: .continuous)
                                     .fill(selectedTarget == target
-                                          ? target.accentColor.opacity(0.12)
-                                          : Color(white: 0.07))
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                          ? target.accentColor.opacity(0.10)
+                                          : Color(white: 0.06))
+                                RoundedRectangle(cornerRadius: 12, style: .continuous)
                                     .stroke(selectedTarget == target
-                                            ? target.accentColor.opacity(0.5)
-                                            : Color(white: 0.12),
+                                            ? target.accentColor.opacity(0.55)
+                                            : Color(white: 0.10),
                                             lineWidth: 1)
                             }
                         )
@@ -160,16 +155,50 @@ struct SecurityMenuView: View {
             }
             .padding(.horizontal, 16)
 
-            HStack(spacing: 6) {
-                Image(systemName: "lock.shield")
-                    .font(.system(size: 10))
-                    .foregroundStyle(selectedTarget.accentColor)
+            HStack(spacing: 5) {
+                Image(systemName: "app.badge")
+                    .font(.system(size: 9))
+                    .foregroundStyle(selectedTarget.accentColor.opacity(0.7))
                 Text(selectedTarget.rawValue)
-                    .font(.system(size: 10, weight: .medium, design: .monospaced))
-                    .foregroundStyle(Color(white: 0.4))
+                    .font(.system(size: 9, weight: .medium, design: .monospaced))
+                    .foregroundStyle(Color(white: 0.3))
             }
             .padding(.horizontal, 16)
-            .padding(.bottom, 2)
+        }
+    }
+
+    // MARK: - Security Section
+
+    private var securitySection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Rectangle()
+                    .fill(Color.red.opacity(0.5))
+                    .frame(width: 3, height: 12)
+                    .clipShape(Capsule())
+                Text("SECURITY")
+                    .font(.system(size: 10, weight: .black))
+                    .foregroundStyle(Color.red.opacity(0.85))
+                    .kerning(2)
+                Rectangle()
+                    .fill(Color.red.opacity(0.15))
+                    .frame(height: 1)
+            }
+            .padding(.horizontal, 16)
+
+            VStack(spacing: 10) {
+                ForEach(buttons(for: selectedTarget)) { button in
+                    InjectButtonCard(
+                        button: button,
+                        result: results[button.id],
+                        isWorking: working == button.id,
+                        progress: progress[button.id] ?? 0
+                    ) {
+                        inject(button)
+                    }
+                }
+            }
+            .padding(.horizontal, 16)
         }
     }
 
