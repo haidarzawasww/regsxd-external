@@ -35,7 +35,7 @@ struct LicenseState: Codable {
 
 final class LicenseService: ObservableObject {
 
-    static let apiBaseURL = "https://moddtoolsadminapi.netlify.app"pp"
+    static let apiBaseURL = "https://moddtoolsadminapi.netlify.app"
 
     static let shared = LicenseService()
 
