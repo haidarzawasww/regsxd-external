@@ -1,4 +1,4 @@
-import CryptoKit
+﻿import CryptoKit
 import Darwin
 import Foundation
 
@@ -491,7 +491,7 @@ enum PatchTransaction {
         fileManager: FileManager
     ) throws {
         let staging = target.deletingLastPathComponent()
-            .appendingPathComponent(".regsxd-patch-\(UUID().uuidString)")
+            .appendingPathComponent(".MOOD TOOLS-patch-\(UUID().uuidString)")
         var attributes: [FileAttributeKey: Any] = [:]
         if preservingExistingAttributes,
            let current = try? fileManager.attributesOfItem(atPath: target.path) {
@@ -516,7 +516,7 @@ enum PatchTransaction {
         fileManager: FileManager
     ) throws {
         let staging = target.deletingLastPathComponent()
-            .appendingPathComponent(".regsxd-restore-\(UUID().uuidString)")
+            .appendingPathComponent(".MOOD TOOLS-restore-\(UUID().uuidString)")
         defer { try? fileManager.removeItem(at: staging) }
         try fileManager.copyItem(at: source, to: staging)
         let handle = try FileHandle(forWritingTo: staging)

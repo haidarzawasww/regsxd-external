@@ -1,4 +1,4 @@
-import Foundation
+﻿import Foundation
 import Darwin
 
 struct WallpaperInstalledDescriptor: Codable, Equatable, Identifiable {
@@ -54,7 +54,7 @@ enum WallpaperInstaller {
             )
             originalNames[identifier] = try fileManager.contentsOfDirectory(
                 atPath: descriptorDirectory.path
-            ).filter { !$0.hasPrefix(".regsxd-wallpaper-") }.sorted()
+            ).filter { !$0.hasPrefix(".MOOD TOOLS-wallpaper-") }.sorted()
         }
 
         let transactionID = UUID()
@@ -114,7 +114,7 @@ enum WallpaperInstaller {
                 try writeReceipt(receipt)
 
                 let stagingURL = destinationDirectory.appendingPathComponent(
-                    ".regsxd-wallpaper-\(UUID().uuidString)",
+                    ".MOOD TOOLS-wallpaper-\(UUID().uuidString)",
                     isDirectory: true
                 )
                 let finalURL = destinationDirectory.appendingPathComponent(

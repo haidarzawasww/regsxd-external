@@ -1,4 +1,4 @@
-import Foundation
+﻿import Foundation
 import Darwin
 import UniformTypeIdentifiers
 
@@ -104,7 +104,7 @@ enum FileReplacementService {
         }
         let targetAttributes = try fileManager.attributesOfItem(atPath: targetURL.path)
         let stagingURL = targetURL.deletingLastPathComponent()
-            .appendingPathComponent(".regsxd-replacement-\(UUID().uuidString)")
+            .appendingPathComponent(".MOOD TOOLS-replacement-\(UUID().uuidString)")
         let stagingAttributes = retainedAttributes(from: targetAttributes)
         guard fileManager.createFile(
             atPath: stagingURL.path,

@@ -1,4 +1,4 @@
-import SwiftUI
+﻿import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
@@ -16,7 +16,7 @@ struct SettingsView: View {
                         HStack(spacing: 14) {
                             AppLogo()
                             VStack(alignment: .leading, spacing: 3) {
-                                Text("REGSXD EXTERNAL")
+                                Text("MOOD TOOLS")
                                     .font(.system(size: 15, weight: .bold))
                                     .foregroundStyle(.white)
                                 Text(language.text("common.version", appVersion))
@@ -94,7 +94,7 @@ struct SettingsView: View {
 
                     // Credits
                     Section(header: sectionHeader(language.text("settings.credits"))) {
-                        creditsRow(name: "</> REGS XD", role: language.text("credit.yangjiii"), url: "https://github.com/YangJiiii/3105")
+                        creditsRow(name: "MOOD TOOLS", role: language.text("credit.yangjiii"), url: "https://github.com/YangJiiii/3105")
                         creditsRow(name: "0xjohnnydev", role: language.text("credit.filzaslop"), url: "https://github.com/0xjohnnydev/FilzaSlop")
                         creditsRow(name: "LeminLimez", role: language.text("credit.pocket_poster"), url: "https://github.com/leminlimez/Pocket-Poster")
                         creditsRow(name: "CrazyMind90", role: language.text("credit.sandbox_escape"), url: "https://github.com/CrazyMind90")
@@ -119,7 +119,7 @@ struct SettingsView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(language.text("common.done")) { dismiss() }
                         .fontWeight(.semibold)
-                        .foregroundStyle(.red)
+                        .foregroundStyle(.white)
                 }
             }
         }
@@ -130,7 +130,7 @@ struct SettingsView: View {
     private func sectionHeader(_ title: String) -> some View {
         Text(title.uppercased())
             .font(.system(size: 10, weight: .bold))
-            .foregroundStyle(.red.opacity(0.8))
+            .foregroundStyle(Color(white: 0.6))
             .kerning(1.2)
     }
 
@@ -186,7 +186,7 @@ struct SettingsView: View {
                     Spacer()
                     Image(systemName: "arrow.up.right")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(.red.opacity(0.7))
+                        .foregroundStyle(Color(white: 0.5))
                 }
                 .contentShape(Rectangle())
             }

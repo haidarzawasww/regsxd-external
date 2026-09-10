@@ -1,26 +1,28 @@
 import SwiftUI
 
 enum AppTheme {
-    // Accent: bright red in all modes
+    // Accent: pure white in dark mode, pure black in light mode
     static let accent = Color(
-        uiColor: UIColor { _ in
-            UIColor(red: 1.00, green: 0.07, blue: 0.07, alpha: 1.00)  // #FF1212
+        uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(red: 1.00, green: 1.00, blue: 1.00, alpha: 1.00)  // #FFFFFF
+                : UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 1.00)  // #000000
         }
     )
-    // Pure black background in dark mode, very dark in light mode
+    // Pure black background in dark mode, pure white in light mode
     static let pageBackground = Color(
         uiColor: UIColor { traits in
             traits.userInterfaceStyle == .dark
                 ? UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 1.00)  // #000000
-                : UIColor(red: 0.08, green: 0.08, blue: 0.08, alpha: 1.00)  // #141414
+                : UIColor(red: 1.00, green: 1.00, blue: 1.00, alpha: 1.00)  // #FFFFFF
         }
     )
-    // Slightly lighter black for console/secondary surfaces
+    // Slightly lighter surface for console/secondary surfaces
     static let consoleBackground = Color(
         uiColor: UIColor { traits in
             traits.userInterfaceStyle == .dark
-                ? UIColor(red: 0.09, green: 0.00, blue: 0.00, alpha: 1.00)  // #170000 dark red-black
-                : UIColor(red: 0.12, green: 0.02, blue: 0.02, alpha: 1.00)  // #1F0303
+                ? UIColor(red: 0.07, green: 0.07, blue: 0.07, alpha: 1.00)  // #121212
+                : UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.00)  // #F2F2F2
         }
     )
     static let pageInset: CGFloat = 16

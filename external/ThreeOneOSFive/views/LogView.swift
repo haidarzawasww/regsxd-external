@@ -1,4 +1,4 @@
-import SwiftUI
+﻿import SwiftUI
 
 struct LogView: View {
     @ObservedObject var appLog = AppLog.shared
@@ -9,7 +9,7 @@ struct LogView: View {
 
     private var shareText: String {
         var lines: [String] = []
-        lines.append("REGSXD EXTERNAL Log")
+        lines.append("MOOD TOOLS Log")
         lines.append("iOS \(AppInfo.osVersion) (\(AppInfo.osBuild)) — \(AppInfo.machineName)")
         lines.append("Generated: \(Date())")
         lines.append("")

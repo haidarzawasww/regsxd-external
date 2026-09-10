@@ -1,9 +1,9 @@
-import SwiftUI
+﻿import SwiftUI
 import UIKit
 import UniformTypeIdentifiers
 
 private enum PatchPackagePickerPolicy {
-    static let packageType = UTType(filenameExtension: "REGSXD") ?? .data
+    static let packageType = UTType(filenameExtension: "MOOD TOOLS") ?? .data
     static let allowedContentTypes: [UTType] = [packageType, .data]
     static let copiesSelectedDocument = true
 }

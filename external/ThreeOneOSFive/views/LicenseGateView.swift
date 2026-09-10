@@ -1,4 +1,4 @@
-import SwiftUI
+﻿import SwiftUI
 
 // MARK: - LicenseGateView
 
@@ -31,16 +31,16 @@ struct KeyEntryView: View {
         ZStack {
             // Background gradient
             LinearGradient(
-                colors: [Color.black, Color(red: 0.08, green: 0.0, blue: 0.0)],
+                colors: [Color.black, Color(red: 0.04, green: 0.04, blue: 0.04)],
                 startPoint: .top,
                 endPoint: .bottom
             )
             .ignoresSafeArea()
 
-            // Subtle top red glow
+            // Subtle top white glow
             VStack {
                 RadialGradient(
-                    colors: [Color.red.opacity(0.18), Color.clear],
+                    colors: [Color.white.opacity(0.08), Color.clear],
                     center: .center,
                     startRadius: 0,
                     endRadius: 260
@@ -59,7 +59,7 @@ struct KeyEntryView: View {
 
                     // Top accent bar
                     Rectangle()
-                        .fill(Color.red)
+                        .fill(Color.white)
                         .frame(width: 48, height: 3)
                         .clipShape(Capsule())
                         .padding(.bottom, 24)
@@ -71,7 +71,7 @@ struct KeyEntryView: View {
                             .frame(width: 96, height: 96)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 24, style: .continuous)
-                                    .stroke(Color.red.opacity(0.4), lineWidth: 1)
+                                    .stroke(Color.white.opacity(0.25), lineWidth: 1)
                             )
 
                         if let icon = UIImage(named: "AppIcon60x60") ?? UIImage(named: "AppIcon") {
@@ -81,15 +81,15 @@ struct KeyEntryView: View {
                                 .frame(width: 96, height: 96)
                                 .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
                         } else {
-                            Text("RX")
+                            Text("MT")
                                 .font(.system(size: 38, weight: .black))
-                                .foregroundStyle(.red)
+                                .foregroundStyle(.white)
                         }
                     }
                     .padding(.bottom, 20)
 
                     // Title
-                    Text("REGSXD EXTERNAL")
+                    Text("MOOD TOOLS")
                         .font(.system(size: 22, weight: .black))
                         .foregroundStyle(.white)
                         .kerning(1.2)
@@ -97,15 +97,15 @@ struct KeyEntryView: View {
                     // Divider
                     HStack(spacing: 8) {
                         Rectangle()
-                            .fill(Color.red.opacity(0.25))
+                            .fill(Color.white.opacity(0.15))
                             .frame(height: 1)
-                        Text("BY REGS XD")
+                        Text("MOOD TOOLS")
                             .font(.system(size: 9, weight: .semibold))
-                            .foregroundStyle(Color(white: 0.3))
+                            .foregroundStyle(Color(white: 0.4))
                             .kerning(2)
                             .fixedSize()
                         Rectangle()
-                            .fill(Color.red.opacity(0.25))
+                            .fill(Color.white.opacity(0.15))
                             .frame(height: 1)
                     }
                     .padding(.horizontal, 40)
@@ -143,10 +143,10 @@ struct KeyEntryView: View {
                         .padding(.horizontal, 48)
                         .background(
                             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .fill(Color.red.opacity(0.07))
+                                .fill(Color.white.opacity(0.06))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                        .stroke(Color.red.opacity(0.55), lineWidth: 1)
+                                        .stroke(Color.white.opacity(0.45), lineWidth: 1)
                                 )
                         )
                         .offset(x: shaking ? -8 : 0)
@@ -172,12 +172,12 @@ struct KeyEntryView: View {
                     if let error = license.lastError {
                         HStack(spacing: 5) {
                             Rectangle()
-                                .fill(Color.red)
+                                .fill(Color.white)
                                 .frame(width: 3)
                                 .clipShape(Capsule())
                             Text(error)
                                 .font(.caption)
-                                .foregroundStyle(Color.red.opacity(0.9))
+                                .foregroundStyle(Color.white.opacity(0.9))
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading, 4)
@@ -210,10 +210,10 @@ struct KeyEntryView: View {
                         .background(
                             Group {
                                 if keyInput.isEmpty || license.isChecking {
-                                    Color.red.opacity(0.25)
+                                    Color.white.opacity(0.12)
                                 } else {
                                     LinearGradient(
-                                        colors: [Color(red: 0.85, green: 0.05, blue: 0.05), Color.red],
+                                        colors: [Color(white: 0.25), Color(white: 0.15)],
                                         startPoint: .leading,
                                         endPoint: .trailing
                                     )
@@ -223,7 +223,7 @@ struct KeyEntryView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                         .overlay(
                             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .stroke(Color.red.opacity(keyInput.isEmpty ? 0.15 : 0.0), lineWidth: 1)
+                                .stroke(Color.white.opacity(keyInput.isEmpty ? 0.1 : 0.0), lineWidth: 1)
                         )
                     }
                     .disabled(keyInput.isEmpty || license.isChecking)

@@ -1,4 +1,4 @@
-﻿# aimbody risk free fire max
+﻿# aimbody risk free fire ori
 
 Place the patch file for this variant here.
 

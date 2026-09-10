@@ -1,4 +1,4 @@
-import Foundation
+﻿import Foundation
 
 enum PatchWorkspaceService {
     private struct Manifest: Codable {
@@ -7,7 +7,7 @@ enum PatchWorkspaceService {
         var displayName: String
     }
 
-    private static let manifestFilename = ".regsxd-project.plist"
+    private static let manifestFilename = ".MOOD TOOLS-project.plist"
     private static let manifestSchemaVersion = 1
 
     static func documentsRootURL(fileManager: FileManager = .default) throws -> URL {
@@ -48,7 +48,7 @@ enum PatchWorkspaceService {
             fileManager: fileManager
         )
         let staging = root.appendingPathComponent(
-            ".regsxd-workspace-\(UUID().uuidString)",
+            ".MOOD TOOLS-workspace-\(UUID().uuidString)",
             isDirectory: true
         )
         defer { try? fileManager.removeItem(at: staging) }
@@ -133,7 +133,7 @@ enum PatchWorkspaceService {
             fileManager: fileManager
         )
         let displaced = root.appendingPathComponent(
-            ".regsxd-displaced-workspace-\(UUID().uuidString)",
+            ".MOOD TOOLS-displaced-workspace-\(UUID().uuidString)",
             isDirectory: true
         )
 

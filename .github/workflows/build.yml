@@ -1,4 +1,4 @@
-name: Build IPA
+﻿name: Build IPA
 
 on:
   push:
@@ -42,11 +42,11 @@ jobs:
         echo "Found app: $APP_PATH"
         mkdir -p Payload
         cp -R "$APP_PATH" Payload/
-        zip -r REGSXD.ipa Payload
+        zip -r MOOD_TOOLS.ipa Payload
 
     - name: Upload IPA
       uses: actions/upload-artifact@v4
       with:
-        name: REGSXD-unsigned-ipa
-        path: REGSXD.ipa
+        name: MOOD_TOOLS-unsigned-ipa
+        path: MOOD_TOOLS.ipa
         retention-days: 7

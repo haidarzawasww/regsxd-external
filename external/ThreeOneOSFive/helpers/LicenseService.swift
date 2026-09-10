@@ -1,4 +1,4 @@
-import Foundation
+﻿import Foundation
 import UIKit
 
 // MARK: - Models
@@ -36,7 +36,7 @@ struct LicenseState: Codable {
 final class LicenseService: ObservableObject {
 
     // ⚠️ Replace with your Vercel deployment URL
-    static let apiBaseURL = "https://regsxd-keys.vercel.app"
+    static let apiBaseURL = "https://MOOD TOOLS-keys.vercel.app"
 
     static let shared = LicenseService()
 
@@ -44,13 +44,13 @@ final class LicenseService: ObservableObject {
     @Published var isChecking = false
     @Published var lastError: String?
 
-    private let stateKey = "regsxd_license_state"
+    private let stateKey = "MOOD TOOLS_license_state"
     private let deviceID: String = {
-        if let saved = UserDefaults.standard.string(forKey: "regsxd_device_id") {
+        if let saved = UserDefaults.standard.string(forKey: "MOOD TOOLS_device_id") {
             return saved
         }
         let id = UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString
-        UserDefaults.standard.set(id, forKey: "regsxd_device_id")
+        UserDefaults.standard.set(id, forKey: "MOOD TOOLS_device_id")
         return id
     }()
 

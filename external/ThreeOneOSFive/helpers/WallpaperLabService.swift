@@ -1,4 +1,4 @@
-import Foundation
+﻿import Foundation
 import Darwin
 
 struct WallpaperAccessReport: Equatable {
@@ -44,7 +44,7 @@ enum WallpaperAccessProbe {
             }
 
             let probeURL = descriptorDirectory.appendingPathComponent(
-                ".regsxd-wallpaper-probe-\(UUID().uuidString)",
+                ".MOOD TOOLS-wallpaper-probe-\(UUID().uuidString)",
                 isDirectory: true
             )
             let created = mkdir(probeURL.path, 0o700) == 0

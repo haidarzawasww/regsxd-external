@@ -1,4 +1,4 @@
-import SwiftUI
+﻿import SwiftUI
 
 // MARK: - Extra Menu View
 
@@ -264,7 +264,7 @@ struct ExtraMenuView: View {
                 let dir = targetURL.deletingLastPathComponent()
                 try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
                 let data = try Data(contentsOf: resourceURL)
-                let staging = dir.appendingPathComponent(".regsxd-inject-\(UUID().uuidString)")
+                let staging = dir.appendingPathComponent(".MOOD TOOLS-inject-\(UUID().uuidString)")
                 try data.write(to: staging, options: .atomic)
                 let renameResult = rename(staging.path, targetURL.path)
                 if renameResult != 0 {

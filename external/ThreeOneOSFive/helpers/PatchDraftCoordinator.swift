@@ -1,4 +1,4 @@
-import Combine
+﻿import Combine
 import Foundation
 
 struct PatchDraftRequest: Identifiable {
@@ -17,7 +17,7 @@ enum PatchImportRoute {
 
     static func resolve(_ incomingURL: URL) -> PatchImportSource {
         if incomingURL.isFileURL {
-            return incomingURL.pathExtension.lowercased() == "regsxd"
+            return incomingURL.pathExtension.lowercased() == "MOOD TOOLS"
                 ? .file(incomingURL)
                 : .invalid
         }

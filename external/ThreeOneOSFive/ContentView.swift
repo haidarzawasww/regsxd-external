@@ -1,4 +1,4 @@
-import SwiftUI
+﻿import SwiftUI
 import UIKit
 
 struct ContentView: View {
@@ -80,18 +80,18 @@ struct ContentView: View {
                         VStack(spacing: 4) {
                             Image(systemName: section.systemImage)
                                 .font(.system(size: 20, weight: isSelected ? .bold : .regular))
-                                .foregroundStyle(isSelected ? Color.red : Color(white: 0.45))
+                                .foregroundStyle(isSelected ? Color.white : Color(white: 0.45))
                                 .scaleEffect(isSelected ? 1.1 : 1.0)
                                 .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
                             Text(language.text(section.titleKey))
                                 .font(.system(size: 10, weight: isSelected ? .semibold : .regular))
-                                .foregroundStyle(isSelected ? Color.red : Color(white: 0.45))
+                                .foregroundStyle(isSelected ? Color.white : Color(white: 0.45))
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
                         .background(
                             isSelected
-                                ? Color.red.opacity(0.08)
+                                ? Color.white.opacity(0.10)
                                 : Color.clear
                         )
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -104,11 +104,11 @@ struct ContentView: View {
             .padding(.bottom, 20)
             .padding(.top, 6)
             .background(.ultraThinMaterial)
-            .background(Color.black.opacity(0.85))
+            .background(Color.black.opacity(0.92))
             .overlay(
                 Rectangle()
                     .frame(height: 0.5)
-                    .foregroundStyle(Color.red.opacity(0.2)),
+                    .foregroundStyle(Color.white.opacity(0.15)),
                 alignment: .top
             )
         }
@@ -140,7 +140,7 @@ struct ContentView: View {
                     )
                 }
             }
-            .navigationTitle("REGSXD EXTERNAL")
+            .navigationTitle("MOOD TOOLS")
             .navigationSplitViewColumnWidth(min: 210, ideal: 240, max: 300)
         } detail: {
             sectionContent(selectedVisibleSection)
@@ -285,12 +285,12 @@ private struct DashboardView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     VStack(spacing: 0) {
-                        Text("REGSXD EXTERNAL IOS")
+                        Text("MOOD TOOLS")
                             .font(.system(size: 14, weight: .black))
-                            .foregroundStyle(.red)
-                        Text("by </> REGS XD")
+                            .foregroundStyle(.white)
+                        Text("by MOOD TOOLS")
                             .font(.system(size: 10, weight: .medium))
-                            .foregroundStyle(.red.opacity(0.7))
+                            .foregroundStyle(Color(white: 0.55))
                     }
                 }
 
@@ -318,7 +318,7 @@ private struct DashboardView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .fill(Color(white: 0.1))
-                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(Color.red.opacity(0.3), lineWidth: 1))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(Color.white.opacity(0.2), lineWidth: 1))
                         .frame(width: 48, height: 48)
                     if let icon = UIImage(named: "AppIcon60x60") ?? UIImage(named: "AppIcon") {
                         Image(uiImage: icon)
@@ -327,16 +327,16 @@ private struct DashboardView: View {
                             .frame(width: 48, height: 48)
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     } else {
-                        Text("RX")
+                        Text("MT")
                             .font(.system(size: 18, weight: .black))
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.white)
                     }
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("REGSXD EXTERNAL IOS")
+                    Text("MOOD TOOLS")
                         .font(.system(size: 15, weight: .bold))
                         .foregroundStyle(.white)
-                    Text("</> REGS XD")
+                    Text("MOOD TOOLS")
                         .font(.system(size: 12, weight: .regular))
                         .foregroundStyle(Color(white: 0.5))
                     Text("v\(AppInfo.appVersion)")
@@ -354,7 +354,7 @@ private struct DashboardView: View {
             if let state = license.licenseState {
                 HStack {
                     Image(systemName: "key.fill")
-                        .foregroundStyle(.red)
+                        .foregroundStyle(.white)
                     if showLicenseKey {
                         Text(state.key)
                             .font(.system(size: 13, weight: .medium, design: .monospaced))
@@ -395,17 +395,17 @@ private struct DashboardView: View {
                 }
                 .listRowBackground(Color(white: 0.07))
 
-                Button(role: .destructive) {
-                    showLogoutConfirm = true
-                } label: {
-                    Label("Logout / Change Key", systemImage: "rectangle.portrait.and.arrow.right")
-                        .foregroundStyle(.red)
-                }
+                    Button(role: .destructive) {
+                        showLogoutConfirm = true
+                    } label: {
+                        Label("Logout / Change Key", systemImage: "rectangle.portrait.and.arrow.right")
+                            .foregroundStyle(.white)
+                    }
                 .listRowBackground(Color(white: 0.07))
             }
         } header: {
             Text("LICENSE")
-                .foregroundStyle(.red.opacity(0.8))
+                .foregroundStyle(Color(white: 0.7))
         }
     }
 
@@ -449,7 +449,7 @@ private struct DashboardView: View {
             }
         } header: {
             Text("DEVICE")
-                .foregroundStyle(.red.opacity(0.8))
+                .foregroundStyle(Color(white: 0.7))
         } footer: {
             Text("Support iOS 15 – 27")
                 .foregroundStyle(Color(white: 0.4))

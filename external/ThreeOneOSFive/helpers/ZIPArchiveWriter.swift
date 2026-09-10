@@ -1,4 +1,4 @@
-import Foundation
+﻿import Foundation
 
 enum ZIPArchiveWriterError: Error, Equatable {
     case emptySelection
@@ -45,7 +45,7 @@ enum ZIPArchiveWriter {
         }
 
         let stagingURL = destinationURL.deletingLastPathComponent()
-            .appendingPathComponent(".regsxd-archive-\(UUID().uuidString)")
+            .appendingPathComponent(".MOOD TOOLS-archive-\(UUID().uuidString)")
         guard fileManager.createFile(atPath: stagingURL.path, contents: nil) else {
             throw ZIPArchiveWriterError.writeFailed
         }

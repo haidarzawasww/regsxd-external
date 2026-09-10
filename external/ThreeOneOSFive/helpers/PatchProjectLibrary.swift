@@ -1,4 +1,4 @@
-import Foundation
+﻿import Foundation
 
 struct PatchLibraryItem: Identifiable {
     let summary: PatchPackageSummary
@@ -47,7 +47,7 @@ enum PatchProjectLibrary {
               ) else { return [] }
 
         var byID: [UUID: PatchLibraryItem] = [:]
-        for url in urls where url.pathExtension.lowercased() == "regsxd" {
+        for url in urls where url.pathExtension.lowercased() == "MOOD TOOLS" {
             do {
                 let data = try readPackage(at: url)
                 let summary = try PatchPackageCodec.inspect(data)
@@ -104,10 +104,10 @@ enum PatchProjectLibrary {
         } else {
             let root = try packageRootURL(fileManager: fileManager)
             let baseName = sanitizedFilename(projectName)
-            var candidate = root.appendingPathComponent(baseName).appendingPathExtension("REGSXD")
+            var candidate = root.appendingPathComponent(baseName).appendingPathExtension("MOOD TOOLS")
             var suffix = 2
             while fileManager.fileExists(atPath: candidate.path) {
-                candidate = root.appendingPathComponent("\(baseName)-\(suffix)").appendingPathExtension("REGSXD")
+                candidate = root.appendingPathComponent("\(baseName)-\(suffix)").appendingPathExtension("MOOD TOOLS")
                 suffix += 1
             }
             destination = candidate

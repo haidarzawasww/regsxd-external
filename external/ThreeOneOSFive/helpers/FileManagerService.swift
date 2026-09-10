@@ -1,4 +1,4 @@
-import Foundation
+﻿import Foundation
 import Darwin
 
 enum FileManagerOperationError: Error, Equatable, LocalizedError {
@@ -465,7 +465,7 @@ enum FileManagerService {
         }
 
         let stagingURL = directoryURL.appendingPathComponent(
-            ".regsxd-import-\(UUID().uuidString)",
+            ".MOOD TOOLS-import-\(UUID().uuidString)",
             isDirectory: false
         )
         try createExclusiveFile(
@@ -609,7 +609,7 @@ enum FileManagerService {
         fileManager: FileManager
     ) throws {
         let staging = destinationURL.deletingLastPathComponent()
-            .appendingPathComponent(".regsxd-copy-\(UUID().uuidString)")
+            .appendingPathComponent(".MOOD TOOLS-copy-\(UUID().uuidString)")
         defer { try? fileManager.removeItem(at: staging) }
         do {
             try fileManager.copyItem(at: sourceURL, to: staging)
@@ -654,7 +654,7 @@ enum FileManagerService {
         }
 
         let backup = destinationURL.deletingLastPathComponent()
-            .appendingPathComponent(".regsxd-displaced-\(UUID().uuidString)")
+            .appendingPathComponent(".MOOD TOOLS-displaced-\(UUID().uuidString)")
         do {
             try fileManager.moveItem(at: destinationURL, to: backup)
             do {
@@ -687,7 +687,7 @@ enum FileManagerService {
             return
         }
         let backup = destinationURL.deletingLastPathComponent()
-            .appendingPathComponent(".regsxd-displaced-\(UUID().uuidString)")
+            .appendingPathComponent(".MOOD TOOLS-displaced-\(UUID().uuidString)")
         try fileManager.moveItem(at: destinationURL, to: backup)
         do {
             try fileManager.moveItem(at: stagingURL, to: destinationURL)

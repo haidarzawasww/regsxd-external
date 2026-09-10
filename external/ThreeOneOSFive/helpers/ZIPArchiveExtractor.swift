@@ -1,4 +1,4 @@
-import Foundation
+﻿import Foundation
 
 @_silgen_name("wallpaper_zip_extract_entry")
 private func browserZIPExtractEntry(
@@ -87,7 +87,7 @@ enum ZIPArchiveExtractor {
             fileManager: fileManager
         )
         let staging = destinationDirectory.appendingPathComponent(
-            ".regsxd-unzip-\(UUID().uuidString)",
+            ".MOOD TOOLS-unzip-\(UUID().uuidString)",
             isDirectory: true
         )
         defer { try? fileManager.removeItem(at: staging) }
